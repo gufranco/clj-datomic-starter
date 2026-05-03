@@ -1,0 +1,9 @@
+;; Entity-spec predicates (`:db.entity/preds`) face the same classloader
+;; constraints as attribute predicates. We declare entity specs that bind a
+;; required-attributes set; production builds add the AOT-compiled predicate
+;; namespace to the transactor classpath and attach predicates here.
+[{:db/ident         :entry/spec
+  :db.entity/attrs  [:entry/id :entry/postings :entry/occurred-at]}
+
+ {:db/ident         :posting/spec
+  :db.entity/attrs  [:posting/id :posting/account :posting/amount-minor :posting/side :posting/currency]}]

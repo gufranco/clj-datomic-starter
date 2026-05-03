@@ -1,0 +1,45 @@
+[{:db/ident :ledger/post-entry
+  :db/doc   "Atomically post an entry: validate balance, cas account balances, insert postings."
+  :db/fn    #db/fn
+  {:lang     :clojure
+   :requires [[datomic.api :as d]]
+   :params   [db entry]
+   :code
+   (let [{:keys [postings memo occurred-at entry-id]} entry
+         signed (fn [{:keys [side amount-minor]}]
+                  (case side
+                    :debit  (long amount-minor)
+                    :credit (- (long amount-minor))))
+         _check (when-not (zero? (reduce + 0 (map signed postings)))
+                  (throw (ex-info "entry not balanced" {:postings postings})))
+         _check (when-not (apply = (map :currency postings))
+                  (throw (ex-info "mixed currency" {:postings postings})))
+         account->delta
+         (->> postings
+              (group-by :account-id)
+              (reduce-kv
+               (fn [acc account-id ps]
+                 (assoc acc account-id (reduce + 0 (map signed ps))))
+               {}))
+         cas-ops
+         (mapv (fn [[account-id delta]]
+                 (let [eid     (d/entid db [:account/id account-id])
+                       current (long (or (:account/balance-minor (d/entity db eid)) 0))]
+                   [:db/cas eid :account/balance-minor current (+ current delta)]))
+               account->delta)
+         posting-data
+         (mapv (fn [{:keys [posting-id account-id amount-minor side currency]}]
+                 {:db/id                (d/tempid :db.part/user)
+                  :posting/id           (or posting-id (java.util.UUID/randomUUID))
+                  :posting/account      [:account/id account-id]
+                  :posting/amount-minor (long amount-minor)
+                  :posting/side         side
+                  :posting/currency     currency})
+               postings)
+         entry-data
+         {:db/id             (d/tempid :db.part/user)
+          :entry/id          (or entry-id (java.util.UUID/randomUUID))
+          :entry/occurred-at (or occurred-at (java.util.Date.))
+          :entry/postings    (mapv :db/id posting-data)
+          :entry/memo        (or memo "")}]
+     (into (conj posting-data entry-data) cas-ops))}}]

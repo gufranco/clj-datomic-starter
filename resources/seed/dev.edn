@@ -1,0 +1,17 @@
+[{:account/id            #uuid "00000000-0000-0000-0000-000000000001"
+  :account/customer-id   #uuid "00000000-0000-0000-0000-0000000000aa"
+  :account/number        "1001"
+  :account/currency      "USD"
+  :account/kind          :asset
+  :account/status        :open
+  :account/balance-minor 0
+  :account/opened-at     #inst "2026-01-01T00:00:00Z"}
+
+ {:account/id            #uuid "00000000-0000-0000-0000-000000000002"
+  :account/customer-id   #uuid "00000000-0000-0000-0000-0000000000aa"
+  :account/number        "1002"
+  :account/currency      "USD"
+  :account/kind          :asset
+  :account/status        :open
+  :account/balance-minor 0
+  :account/opened-at     #inst "2026-01-01T00:00:00Z"}]

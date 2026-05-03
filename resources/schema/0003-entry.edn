@@ -1,0 +1,18 @@
+[{:db/ident       :entry/id
+  :db/valueType   :db.type/uuid
+  :db/cardinality :db.cardinality/one
+  :db/unique      :db.unique/identity}
+
+ {:db/ident       :entry/postings
+  :db/valueType   :db.type/ref
+  :db/cardinality :db.cardinality/many
+  :db/isComponent true
+  :db/doc         "Postings that make up this entry. Component-owned."}
+
+ {:db/ident       :entry/occurred-at
+  :db/valueType   :db.type/instant
+  :db/cardinality :db.cardinality/one}
+
+ {:db/ident       :entry/memo
+  :db/valueType   :db.type/string
+  :db/cardinality :db.cardinality/one}]

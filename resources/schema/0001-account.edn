@@ -1,0 +1,44 @@
+[{:db/ident       :account/id
+  :db/valueType   :db.type/uuid
+  :db/cardinality :db.cardinality/one
+  :db/unique      :db.unique/identity
+  :db/doc         "Stable identifier for an account."}
+
+ {:db/ident       :account/customer-id
+  :db/valueType   :db.type/uuid
+  :db/cardinality :db.cardinality/one
+  :db/index       true
+  :db/doc         "Owner of the account. UUID, never name or email."}
+
+ {:db/ident       :account/number
+  :db/valueType   :db.type/string
+  :db/cardinality :db.cardinality/one
+  :db/doc         "Human-readable account number, unique per customer."}
+
+ {:db/ident       :account/currency
+  :db/valueType   :db.type/string
+  :db/cardinality :db.cardinality/one
+  :db/doc         "ISO 4217 currency code."}
+
+ {:db/ident       :account/kind
+  :db/valueType   :db.type/keyword
+  :db/cardinality :db.cardinality/one
+  :db/doc         "One of :asset :liability :equity :revenue :expense."}
+
+ {:db/ident       :account/status
+  :db/valueType   :db.type/keyword
+  :db/cardinality :db.cardinality/one
+  :db/doc         "Lifecycle: :open or :closed."}
+
+ {:db/ident       :account/balance-minor
+  :db/valueType   :db.type/long
+  :db/cardinality :db.cardinality/one
+  :db/doc         "Current balance in minor units (cents). Updated via cas."}
+
+ {:db/ident       :account/opened-at
+  :db/valueType   :db.type/instant
+  :db/cardinality :db.cardinality/one}
+
+ {:db/ident       :account/closed-at
+  :db/valueType   :db.type/instant
+  :db/cardinality :db.cardinality/one}]

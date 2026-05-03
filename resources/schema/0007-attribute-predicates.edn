@@ -1,0 +1,9 @@
+;; Intentionally empty placeholder. Attribute predicates (`:db.attr/preds`) and
+;; entity predicates (`:db.entity/preds`) require fully-qualified Clojure
+;; symbols whose namespaces must be reachable from the transactor's classloader.
+;; In a peer-only setup that loads source from `src/`, the transactor thread
+;; cannot resolve those namespaces without AOT-compiled classes on the
+;; classpath. Production deployments AOT-compile predicate namespaces in their
+;; uberjar build and place the jar on the transactor classpath. See
+;; docs/schema-growth.md for the recipe.
+[]

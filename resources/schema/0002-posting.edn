@@ -1,0 +1,25 @@
+[{:db/ident       :posting/id
+  :db/valueType   :db.type/uuid
+  :db/cardinality :db.cardinality/one
+  :db/unique      :db.unique/identity
+  :db/doc         "Posting identifier."}
+
+ {:db/ident       :posting/account
+  :db/valueType   :db.type/ref
+  :db/cardinality :db.cardinality/one
+  :db/index       true
+  :db/doc         "Account the posting affects."}
+
+ {:db/ident       :posting/amount-minor
+  :db/valueType   :db.type/long
+  :db/cardinality :db.cardinality/one
+  :db/doc         "Always positive; polarity carried by :posting/side."}
+
+ {:db/ident       :posting/side
+  :db/valueType   :db.type/keyword
+  :db/cardinality :db.cardinality/one
+  :db/doc         "One of :debit or :credit."}
+
+ {:db/ident       :posting/currency
+  :db/valueType   :db.type/string
+  :db/cardinality :db.cardinality/one}]

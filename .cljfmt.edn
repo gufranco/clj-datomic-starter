@@ -1,0 +1,13 @@
+{:extra-indents
+ {component/start    [[:inner 0]]
+  component/stop     [[:inner 0]]
+  defflow            [[:inner 0]]
+  flow               [[:inner 0]]
+  match?             [[:inner 0]]}
+
+ :remove-multiple-non-indenting-spaces? false
+ :remove-surrounding-whitespace?        true
+ :remove-trailing-whitespace?           true
+ :insert-missing-whitespace?            true
+ :remove-consecutive-blank-lines?       true
+ :sort-ns-references?                   true}

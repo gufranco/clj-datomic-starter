@@ -1,0 +1,32 @@
+{:profile      #profile {:dev  :dev
+                         :test :test
+                         :prod :prod}
+
+ :http         {:port    #long #or [#env LEDGER_HTTP_PORT "8080"]
+                :host    #or [#env LEDGER_HTTP_HOST "0.0.0.0"]
+                :join?   false}
+
+ :metrics      {:port    #long #or [#env LEDGER_METRICS_PORT "9090"]
+                :enabled #profile {:dev  true
+                                   :test false
+                                   :prod true}}
+
+ :datomic      {:uri     #profile {:dev  "datomic:dev://localhost:4334/ledger"
+                                   :test "datomic:mem://ledger-test"
+                                   :prod #env LEDGER_DATOMIC_URI}
+                :create? #profile {:dev  true
+                                   :test true
+                                   :prod false}}
+
+ :migrations   {:schema-dir "schema"
+                :tx-fns-dir "tx-fns"}
+
+ :seed         {:enabled? #profile {:dev  true
+                                    :test false
+                                    :prod false}
+                :file     "seed/dev.edn"}
+
+ :logging      {:level   #or [#keyword #env LEDGER_LOG_LEVEL :info]
+                :format  #profile {:dev  :pretty
+                                   :test :pretty
+                                   :prod :json}}}

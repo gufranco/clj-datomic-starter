@@ -1,0 +1,15 @@
+[{:db/ident       :tx/correlation-id
+  :db/valueType   :db.type/string
+  :db/cardinality :db.cardinality/one
+  :db/index       true
+  :db/doc         "Correlation ID propagated from the originating request."}
+
+ {:db/ident       :tx/actor
+  :db/valueType   :db.type/string
+  :db/cardinality :db.cardinality/one
+  :db/doc         "Identifier of the actor that authored the transaction."}
+
+ {:db/ident       :tx/source
+  :db/valueType   :db.type/keyword
+  :db/cardinality :db.cardinality/one
+  :db/doc         "Origin of the transaction. e.g. :http, :job, :seed."}]

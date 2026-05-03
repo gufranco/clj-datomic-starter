@@ -1,0 +1,6 @@
+[{:db/ident       :account/customer+number
+  :db/valueType   :db.type/tuple
+  :db/tupleAttrs  [:account/customer-id :account/number]
+  :db/cardinality :db.cardinality/one
+  :db/unique      :db.unique/identity
+  :db/doc         "Composite uniqueness: one account-number per customer."}]

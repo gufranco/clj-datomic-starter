@@ -1,0 +1,63 @@
+services:
+  postgres:
+    image: postgres:16-alpine
+    environment:
+      POSTGRES_USER: datomic
+      POSTGRES_PASSWORD: datomic
+      POSTGRES_DB: datomic
+    ports:
+      - "5432:5432"
+    volumes:
+      - pgdata:/var/lib/postgresql/data
+      - ./docker/postgres-init.sql:/docker-entrypoint-initdb.d/01-init.sql:ro
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U datomic"]
+      interval: 5s
+      timeout: 5s
+      retries: 10
+
+  transactor:
+    image: clojure:temurin-21-tools-deps-alpine
+    depends_on:
+      postgres:
+        condition: service_healthy
+    working_dir: /opt/datomic
+    command: ["bin/transactor", "/opt/datomic/config/transactor.properties"]
+    environment:
+      DATOMIC_LICENSE_KEY: ${DATOMIC_LICENSE_KEY:-}
+      JAVA_OPTS: >-
+        -server
+        -Xms1g -Xmx1g
+        -XX:+UseG1GC
+        -XX:MaxGCPauseMillis=50
+        -XX:+ExitOnOutOfMemoryError
+    volumes:
+      - ./docker/datomic:/opt/datomic
+      - ./docker/transactor.properties:/opt/datomic/config/transactor.properties:ro
+    ports:
+      - "4334:4334"
+      - "4335:4335"
+      - "4336:4336"
+
+  app:
+    build:
+      context: .
+      dockerfile: docker/Dockerfile
+    depends_on:
+      - transactor
+    environment:
+      LEDGER_PROFILE: prod
+      LEDGER_DATOMIC_URI: datomic:sql://ledger?jdbc:postgresql://postgres:5432/datomic?user=datomic&password=datomic
+      LEDGER_HTTP_PORT: "8080"
+      JAVA_OPTS: >-
+        -server
+        -Xms512m -Xmx1g
+        -XX:+UseG1GC
+        -XX:MaxGCPauseMillis=50
+        -XX:+ExitOnOutOfMemoryError
+    ports:
+      - "8080:8080"
+      - "9090:9090"
+
+volumes:
+  pgdata:
