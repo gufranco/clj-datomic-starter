@@ -8,7 +8,7 @@ WORKDIR /build
 COPY . .
 RUN clojure -T:build uber
 
-FROM eclipse-temurin:21-jre-alpine AS runtime
+FROM eclipse-temurin:25-jre-alpine AS runtime
 RUN addgroup -S app && adduser -S app -G app
 WORKDIR /app
 COPY --from=build /build/target/*-standalone.jar /app/ledger.jar
