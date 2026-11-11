@@ -1,4 +1,4 @@
-FROM clojure:temurin-21-tools-deps-alpine AS deps
+FROM clojure:temurin-26-tools-deps-alpine AS deps
 WORKDIR /build
 COPY deps.edn ./
 RUN clojure -P -X:build
