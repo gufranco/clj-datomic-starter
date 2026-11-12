@@ -17,7 +17,7 @@ services:
       retries: 10
 
   transactor:
-    image: clojure:temurin-21-tools-deps-alpine
+    image: clojure:temurin-25-tools-deps-alpine
     depends_on:
       postgres:
         condition: service_healthy
